@@ -1,0 +1,76 @@
+# This is a sample configuration file. See the nxlog reference manual about the
+## configuration options. It should be installed locally and is also available
+## online at http://nxlog.org/nxlog-docs/en/nxlog-reference-manual.html
+
+## Please set the ROOT to the folder your nxlog was installed into,
+## otherwise it will not start.
+
+#define ROOT C:\Program Files\nxlog
+define ROOT C:\Program Files (x86)\nxlog
+
+Moduledir %ROOT%\modules
+CacheDir %ROOT%\data
+Pidfile %ROOT%\data\nxlog.pid
+SpoolDir %ROOT%\data
+LogFile %ROOT%\data\nxlog.log
+
+
+<Extension json>
+    Module      xm_json
+</Extension>
+
+<Extension syslog>
+   Module xm_syslog
+</Extension>
+
+# Watch any file you'd like
+#<Input file_watch>
+#   Module   im_file
+#   File     "C:\\Program Files (x86)\\nxlog\data\\nxlog.log"
+#   SavePos  TRUE
+#   Exec  $Message = to_json();
+#</Input>
+
+# Nxlog internal logs
+<Input internal>
+   Module im_internal
+   Exec $EventReceivedTime = integer($EventReceivedTime) / 1000000; to_json();
+</Input>
+
+<Input iis_1>
+    Module    im_file
+    File    "C:\\inetpub\\logs\\LogFiles\\W3SVC1\\u_ex*"
+    ReadFromLast True
+    SavePos True
+    Exec    if $raw_event =~ /^#/ drop(); $raw_event = $raw_event + ' <%= node.chef_environment %>;
+</Input>
+
+# Windows Event Loga
+<Input eventlog>
+# Uncomment im_msvistalog for Windows Vista/2008 and later
+   Module im_msvistalog
+# Uncomment im_mseventlog for Windows XP/2000/2003
+#   Module im_mseventlog
+  Exec  $chef_env = '<%= node.chef_environment %>';  $EventReceivedTime = integer($EventReceivedTime) / 1000000; to_json();
+</Input>
+
+<Output out>
+   Module om_tcp
+   Host <%= node['fast-elk']['nxlog']['logstash_host'] %>
+   Port 3515
+</Output>
+
+<Output out_iis>
+   Module om_tcp
+   Host <%= node['fast-elk']['nxlog']['logstash_host'] %>
+   Port 3516
+   OutputType  LineBased
+</Output>
+
+<Route 1>
+   Path internal, eventlog => out
+</Route>
+
+<Route 2>
+   Path iis_1 => out_iis
+</Route>
