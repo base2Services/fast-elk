@@ -42,7 +42,8 @@ package "logstash" do
 end
 
 #logstash templates
-["01-input", "99-output"].each do | c |
+#10-iis.conf.erb  10-windows-eventvwr.conf.erb
+["01-input", "10-windows-eventvwr", "10-iis", "99-output"].each do | c |
   template "/etc/logstash/conf.d/#{c}.conf" do
     source "logstash/#{c}.conf.erb"
     notifies :restart, 'service[logstash]'

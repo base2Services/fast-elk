@@ -1,4 +1,4 @@
 output {
-  elasticsearch { host => localhost }
+  elasticsearch { host => <%= node['fast-elk']['logstash']['elastic_host'] %> }
   stdout { codec => rubydebug }
 }

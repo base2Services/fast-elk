@@ -16,20 +16,24 @@ LogFile   /var/log/nxlog/nxlog.log
   Module om_null
 </Output>
 
-<Input var_syslog>
+<% @inputs = [] %>
+<% node['fast-elk']['nxlog']['log_files'].each do | h | %>
+<% @inputs << "var_#{h[:name]}" %>  
+<Input var_<%= h[:name] %>>
   Module im_file
-   File '/var/log/syslog'
+  File '<%= h[:path] %>'
    ReadFromLast True
    SavePos True
    PollInterval 1
 </Input>
+<% end %>
 
 <Output logstash_raw>
   Module om_tcp
   Port 5000
-  Host localhost
+  Host <%= node['fast-elk']['logstash']['logstash_host'] %>
 </Output>
 
 <Route ls>
-  Path var_syslog => logstash_raw
+  Path <%= @inputs.join(", ") %> => logstash_raw
 </Route>
