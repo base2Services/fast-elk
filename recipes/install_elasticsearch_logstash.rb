@@ -42,6 +42,12 @@ package "logstash" do
 end
 
 #logstash templates
+["01-input", "99-output"].each do | c |
+  template "/etc/logstash/conf.d/#{c}.conf" do
+    source "logstash/#{c}.conf.erb"
+    notifies :restart, 'service[logstash]'
+  end
+end
 
 package "apache2-utils" do
   action :install
@@ -59,16 +65,6 @@ template "/etc/nginx/sites-available/default" do
   notifies :restart, "service[nginx]"
 end
 
-service "nginx" do
-  action [:enable, :start]
-end
-
-["elasticsearch", "logstash"].each do | s |
-  service s do
-    action [:enable, :start]
-  end
-end
-
 ark "kibana" do
   url "https://download.elastic.co/kibana/kibana/kibana-4.1.2-linux-x64.tar.gz"
   prefix_root "/opt"
@@ -79,11 +75,16 @@ ark "kibana" do
 end
 
 template "/etc/init.d/kibana4" do
-  source "templates/default/kibana4.init.erb"
+  source "kibana4.init.erb"
+  mode '0744'
 end
 
-service "kibana4"
-
+["elasticsearch", "logstash", "nginx", "kibana4"].each do | s |
+  service s do
+    action [:enable, :start]
+    supports :status => true, :restart => true, :reload => true
+  end
+end
 
 
 #TODO: wait for 10 secs
