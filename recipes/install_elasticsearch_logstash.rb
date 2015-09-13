@@ -2,6 +2,7 @@
 include_recipe "nginx"
 include_recipe "fast-elk::java"
 
+#fix up repos
 file "/etc/apt/sources.list.d/elasticsearch.list" do
   content "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main"
   notifies :run, "execute[es_gpg]", :immediately
@@ -18,6 +19,7 @@ execute "apt_update" do
   action :nothing
 end
 
+#get keys for apt for logstash and kibana - will need to be notified before apt-get update
 execute "es_gpg" do
   command "wget -O - http://packages.elasticsearch.org/GPG-KEY-elasticsearch | sudo apt-key add -"
   action :nothing
@@ -35,9 +37,21 @@ execute "es_plugins" do
   action :nothing
 end
 
+package "logstash" do
+  action :install
+end
+
+#logstash templates
+["01-input", "99-output"].each do | c |
+  template "/etc/logstash/conf.d/#{c}.conf" do
+    source "logstash/#{c}.conf.erb"
+    notifies :restart, 'service[logstash]'
+  end
+end
+
 package "apache2-utils" do
   action :install
-  notifies :run, "execute[set_kibana_passwd]", immediately
+  notifies :run, "execute[set_kibana_passwd]", :immediately
 end
 
 execute "set_kibana_passwd" do
@@ -51,15 +65,27 @@ template "/etc/nginx/sites-available/default" do
   notifies :restart, "service[nginx]"
 end
 
-service "nginx" do
-  action [:enable, :start]
+ark "kibana" do
+  url "https://download.elastic.co/kibana/kibana/kibana-4.1.2-linux-x64.tar.gz"
+  prefix_root "/opt"
+  prefix_home "/opt"
+  version "4.1.2"
+  #owner apache?
+  #notifies :reload, service[nginx]"
 end
 
-["elasticsearch", "logstash"].each do | s |
+template "/etc/init.d/kibana4" do
+  source "kibana4.init.erb"
+  mode '0744'
+end
+
+["elasticsearch", "logstash", "nginx", "kibana4"].each do | s |
   service s do
     action [:enable, :start]
+    supports :status => true, :restart => true, :reload => true
   end
 end
+
 
 #TODO: wait for 10 secs
 #curl -X GET 'http://localhost:9200'

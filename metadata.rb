@@ -8,3 +8,5 @@ version '0.1.2'
 
 depends 'nginx'
 depends 'java'
+depends 'ark'
+depends 'nxlog'
