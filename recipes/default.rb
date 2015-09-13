@@ -1,1 +1,1 @@
-include_recipe "fast-elk::es_logstash"
+include_recipe "fast-elk::install_elasticsearch_logstash.rb"

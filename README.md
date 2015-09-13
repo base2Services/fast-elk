@@ -15,6 +15,7 @@ nxlog = install nxlog for piping in logs to logstash
 
 nxlog\_windows = sets up reference nxlog for 64bit windows (eventvwr and iis)
 
+default = calls install
 
 ## One way to call this
 berks vendor /tmp/elk/cookbooks/
@@ -22,6 +23,8 @@ berks vendor /tmp/elk/cookbooks/
 cd /tmp/elk
 
 sudo chef-client -l error -z -o fast-elk::install\_elasticsearch\_logstash,fast-elk::nxlog
+
+
 
 ##TODO
 Add more support for more OS's
