@@ -1,0 +1,11 @@
+include_recipe "nxlog"
+
+template "/etc/nxlog/nxlog.conf" do
+  notifies :restart, "service[nxlog]"
+end
+
+    action [:enable, :start]
+        supports :status => true, :restart => true, :reload => true
+
+
+

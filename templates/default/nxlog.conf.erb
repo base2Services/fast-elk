@@ -1,0 +1,35 @@
+User      nxlog
+Group     nxlog
+
+Include   /etc/nxlog/nxlog.conf.d/*.conf
+
+LogLevel  INFO
+LogFile   /var/log/nxlog/nxlog.log
+
+<Extension syslog_module>
+  Module xm_syslog
+</Extension>
+
+# defines a null output to work around issue with commas in default output
+# list
+<Output null_output>
+  Module om_null
+</Output>
+
+<Input var_syslog>
+  Module im_file
+   File '/var/log/syslog'
+   ReadFromLast True
+   SavePos True
+   PollInterval 1
+</Input>
+
+<Output logstash_raw>
+  Module om_tcp
+  Port 5000
+  Host localhost
+</Output>
+
+<Route ls>
+  Path var_syslog => logstash_raw
+</Route>
