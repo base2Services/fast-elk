@@ -4,7 +4,7 @@ input {
     type => syslog
   }
   udp {
-    port => port => <%= node['fast-elk']['logstash']['syslog_port'] %>
+    port => <%= node['fast-elk']['logstash']['syslog_port'] %>
     type => syslog
   }
 }
