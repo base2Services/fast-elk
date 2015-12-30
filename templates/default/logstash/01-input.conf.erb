@@ -1,0 +1,37 @@
+input {
+  tcp {
+    port => <%= node['fast-elk']['logstash']['syslog_port'] %>
+    type => syslog
+  }
+  udp {
+    port => <%= node['fast-elk']['logstash']['syslog_port'] %>
+    type => syslog
+  }
+}
+
+filter {
+  if [type] == "syslog" {
+    grok {
+      match => { "message" => "%{SYSLOGTIMESTAMP:syslog_timestamp} %{SYSLOGHOST:syslog_hostname} %{DATA:syslog_program}(?:\[%{POSINT:syslog_pid}\])?: %{GREEDYDATA:syslog_message}" }
+      add_field => [ "received_at", "%{@timestamp}" ]
+      add_field => [ "received_from", "%{host}" ]
+    }
+    syslog_pri { }
+    date {
+      match => [ "syslog_timestamp", "MMM  d HH:mm:ss", "MMM dd HH:mm:ss" ]
+    }
+  }
+}
+
+
+#logstash needs permission for this
+#
+#input {
+#    file {
+#      "path"=> [
+#        "/var/log/syslog",
+#        "/var/log/auth.log"
+#       ]
+#       "type" => "syslog" 
+#    }
+#}

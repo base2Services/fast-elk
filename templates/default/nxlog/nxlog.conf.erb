@@ -1,0 +1,39 @@
+User      nxlog
+Group     nxlog
+
+Include   /etc/nxlog/nxlog.conf.d/*.conf
+
+LogLevel  INFO
+LogFile   /var/log/nxlog/nxlog.log
+
+<Extension syslog_module>
+  Module xm_syslog
+</Extension>
+
+# defines a null output to work around issue with commas in default output
+# list
+<Output null_output>
+  Module om_null
+</Output>
+
+<% @inputs = [] %>
+<% node['fast-elk']['nxlog']['log_files'].each do | h | %>
+<% @inputs << "var_#{h[:name]}" %>  
+<Input var_<%= h[:name] %>>
+  Module im_file
+  File '<%= h[:path] %>'
+   ReadFromLast True
+   SavePos True
+   PollInterval 1
+</Input>
+<% end %>
+
+<Output logstash_raw>
+  Module om_tcp
+  Port 5000
+  Host <%= node['fast-elk']['logstash']['logstash_host'] %>
+</Output>
+
+<Route ls>
+  Path <%= @inputs.join(", ") %> => logstash_raw
+</Route>
