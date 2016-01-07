@@ -33,8 +33,14 @@ end
 execute "es_plugins" do
   command <<-EOF
     /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
+    /usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.7.1
   EOF
   action :nothing
+end
+
+template "/etc/elasticsearch/elasticsearch.yml" do
+  source "elasticsearch/elasticsearch.yml.erb"
+  notifies :restart, 'service[elasticsearch]'
 end
 
 package "logstash" do
