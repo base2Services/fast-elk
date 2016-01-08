@@ -40,8 +40,8 @@ end
 
 #mkdir
 directory node['fast-elk']['es']['data_path'] do
-   owner 'root'
-   group 'root'
+   owner 'elasticsearch'
+   group 'elasticsearch'
    mode '0755'
    recursive true
    action :create
