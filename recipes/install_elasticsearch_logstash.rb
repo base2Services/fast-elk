@@ -4,7 +4,7 @@ include_recipe "fast-elk::java"
 
 #fix up repos
 file "/etc/apt/sources.list.d/elasticsearch.list" do
-  content "deb http://packages.elasticsearch.org/elasticsearch/1.4/debian stable main"
+  content "deb http://packages.elastic.co/elasticsearch/2.x/debian stable main"
   notifies :run, "execute[es_gpg]", :immediately
   notifies :run, "execute[apt_update]", :immediately
 end
@@ -32,8 +32,8 @@ end
 
 execute "es_plugins" do
   command <<-EOF
-    /usr/share/elasticsearch/bin/plugin -install lmenezes/elasticsearch-kopf
-    /usr/share/elasticsearch/bin/plugin -install elasticsearch/elasticsearch-cloud-aws/2.7.1
+    /usr/share/elasticsearch/bin/plugin install lmenezes/elasticsearch-kopf
+    /usr/share/elasticsearch/bin/plugin install cloud-aws
   EOF
   action :nothing
 end
