@@ -346,11 +346,12 @@ cloud.aws.region: <%= @region %>
 #
 # See <http://elasticsearch.org/tutorials/elasticsearch-on-ec2/>
 # for a step-by-step tutorial.
-<% if @ec2_tag and @ec2_tag_value %>
-discovery.type: ec2
-discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
-discovery.ec2.tag.Role: search
-<% end %>
+
+##<% if @ec2_tag and @ec2_tag_value %>
+##discovery.type: ec2
+##discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
+##discovery.ec2.tag.Role: search
+##<% end %>
 
 #needs "ec2:DescribeInstances" and "ec2:DescribeTags"
 
