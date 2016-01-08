@@ -151,8 +151,8 @@ cluster.name: elk_<%= node.chef_environment %>
 # Path to directory where to store index data allocated for this node.
 #
 #path.data: /path/to/data
-<% if @data_path %>
-path.data: <%= @data_path %>
+<% if node['fast-elk']['es']['data_path'] %>
+path.data: <%= node['fast-elk']['es']['data_path'] %>
 <% end %>
 #
 # Can optionally include more than one location, causing data to be striped across

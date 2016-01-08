@@ -38,8 +38,22 @@ execute "es_plugins" do
   action :nothing
 end
 
+#mkdir
+directory node['fast-elk']['es']['data_path'] do
+   owner 'root'
+   group 'root'
+   mode '0755'
+   recursive true
+   action :create
+end
+
 template "/etc/elasticsearch/elasticsearch.yml" do
   source "elasticsearch/elasticsearch.yml.erb"
+  variables({
+    @region => 'ap-southeast-2',
+    @ec2_tag => node['fast-elk']['es']['ec2_tag'],
+    @ec2_tag_value => node.chef_environment
+	})
   notifies :restart, 'service[elasticsearch]'
 end
 
