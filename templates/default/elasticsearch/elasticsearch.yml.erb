@@ -151,8 +151,8 @@ cluster.name: elk_<%= node.chef_environment %>
 # Path to directory where to store index data allocated for this node.
 #
 #path.data: /path/to/data
-<% if @data_path %>
-path.data: <%= @data_path %>
+<% if node['fast-elk']['es']['data_path'] %>
+path.data: <%= node['fast-elk']['es']['data_path'] %>
 <% end %>
 #
 # Can optionally include more than one location, causing data to be striped across
@@ -336,11 +336,6 @@ discovery.zen.ping.multicast.enabled: false
 #discovery.zen.ping.unicast.hosts: ["host1", "host2:port"]
 discovery.zen.ping.unicast.hosts: [localhost]
 cloud.aws.region: <%= @region %>
-discovery.type: ec2
-discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value =>
-discovery.ec2.tag.Role: search
-
-#needs "ec2:DescribeInstances" and "ec2:DescribeTags"
 
 # EC2 discovery allows to use AWS EC2 API in order to perform discovery.
 #
@@ -351,6 +346,14 @@ discovery.ec2.tag.Role: search
 #
 # See <http://elasticsearch.org/tutorials/elasticsearch-on-ec2/>
 # for a step-by-step tutorial.
+<% if @ec2_tag and @ec2_tag_value %>
+discovery.type: ec2
+discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
+discovery.ec2.tag.Role: search
+<% end %>
+
+#needs "ec2:DescribeInstances" and "ec2:DescribeTags"
+
 
 # GCE discovery allows to use Google Compute Engine API in order to perform discovery.
 #
