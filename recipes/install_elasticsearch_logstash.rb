@@ -50,9 +50,9 @@ end
 template "/etc/elasticsearch/elasticsearch.yml" do
   source "elasticsearch/elasticsearch.yml.erb"
   variables({
-    @region => 'ap-southeast-2',
-    @ec2_tag => node['fast-elk']['es']['ec2_tag'],
-    @ec2_tag_value => node.chef_environment
+    :region => 'ap-southeast-2',
+    :ec2_tag => node['fast-elk']['es']['ec2_tag'],
+    :ec2_tag_value => node.chef_environment
 	})
   notifies :restart, 'service[elasticsearch]'
 end
