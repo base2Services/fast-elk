@@ -87,10 +87,10 @@ template "/etc/nginx/sites-available/default" do
 end
 
 ark "kibana" do
-  url "https://download.elastic.co/kibana/kibana/kibana-4.1.2-linux-x64.tar.gz"
+  url "https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz"
   prefix_root "/opt"
   prefix_home "/opt"
-  version "4.1.2"
+  version "4.3.1"
   #owner apache?
   #notifies :reload, service[nginx]"
 end
@@ -98,6 +98,11 @@ end
 template "/etc/init.d/kibana4" do
   source "kibana4.init.erb"
   mode '0744'
+end
+
+template "/opt/kibana/config/kibana.yml" do
+  source "kibana.yml.erb"
+  notifies :restart, "service[kibana4]"
 end
 
 ["elasticsearch", "logstash", "nginx", "kibana4"].each do | s |
