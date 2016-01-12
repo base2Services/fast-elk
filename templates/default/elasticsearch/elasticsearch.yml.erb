@@ -207,12 +207,12 @@ path.data: <%= node['fast-elk']['es']['data_path'] %>
 
 # Set the bind address specifically (IPv4 or IPv6):
 #
-#network.bind_host: 192.168.0.1
+network.bind_host: 0.0.0.0
 
 # Set the address other nodes will use to communicate with this node. If not
 # set, it is automatically derived. It must point to an actual IP address.
 #
-#network.publish_host: 192.168.0.1
+network.publish_host: <%= node['ipaddress'] %>
 
 # Set both 'bind_host' and 'publish_host':
 #
@@ -334,7 +334,7 @@ discovery.zen.ping.multicast.enabled: false
 #    to perform discovery when new nodes (master or data) are started:
 #
 #discovery.zen.ping.unicast.hosts: ["host1", "host2:port"]
-discovery.zen.ping.unicast.hosts: [localhost]
+#discovery.zen.ping.unicast.hosts: [localhost]
 cloud.aws.region: <%= @region %>
 
 # EC2 discovery allows to use AWS EC2 API in order to perform discovery.
@@ -347,11 +347,11 @@ cloud.aws.region: <%= @region %>
 # See <http://elasticsearch.org/tutorials/elasticsearch-on-ec2/>
 # for a step-by-step tutorial.
 
-##<% if @ec2_tag and @ec2_tag_value %>
-##discovery.type: ec2
-##discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
-##discovery.ec2.tag.Role: search
-##<% end %>
+<% if @ec2_tag and @ec2_tag_value %>
+discovery.type: ec2
+discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
+discovery.ec2.tag.Role: search
+<% end %>
 
 #needs "ec2:DescribeInstances" and "ec2:DescribeTags"
 
