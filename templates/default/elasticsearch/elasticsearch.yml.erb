@@ -349,7 +349,7 @@ cloud.aws.region: <%= @region %>
 
 <% if @ec2_tag and @ec2_tag_value %>
 discovery.type: ec2
-discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
+## discovery.ec2.tag.<%= @ec2_tag %>: <%= @ec2_tag_value %>
 discovery.ec2.tag.Role: search
 <% end %>
 
