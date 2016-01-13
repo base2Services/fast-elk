@@ -10,7 +10,7 @@ file "/etc/apt/sources.list.d/elasticsearch.list" do
 end
 
 file "/etc/apt/sources.list.d/logstash.list" do
-  content "deb http://packages.elasticsearch.org/logstash/1.5/debian stable main"
+  content "deb http://packages.elastic.co/logstash/2.1/debian stable main"
   notifies :run, "execute[apt_update]", :immediately
 end
 
