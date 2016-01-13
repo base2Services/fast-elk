@@ -1,4 +1,3 @@
 output {
-  elasticsearch { host => <%= node['fast-elk']['logstash']['elastic_host'] %> }
-  #stdout { codec => rubydebug } - this fills up disk
+  elasticsearch { }
 }
