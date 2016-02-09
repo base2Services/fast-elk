@@ -43,6 +43,13 @@ cluster.name: elk_<%= node.chef_environment %>
 #
 #node.name: "Franz Kafka"
 
+<% [ 'searchAxx', 'searchBxx'].each do |searchname| %>
+ <% if node['hostname'].include? "#{searchname}" %>
+ node.name: <%= "#{searchname}" %>
+ <% end %>
+<% end %>
+
+
 # Every node can be configured to allow or deny being eligible as the master,
 # and to allow or deny to store the data.
 #
