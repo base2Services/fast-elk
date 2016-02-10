@@ -4,7 +4,7 @@ maintainer_email 'you@example.com'
 license 'all_rights'
 description 'Instalfast-elk/Configures fast-elk'
 long_description 'Instalfast-elk/Configures fast-elk'
-version '0.1.14'
+version '0.1.15'
 
 depends 'nginx'
 depends 'java'
