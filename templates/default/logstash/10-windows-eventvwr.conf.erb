@@ -11,6 +11,9 @@ filter{
         json{
             source => "message"
         }
+        ruby {
+            code => "event['EventType'] = event['Severity']"
+        }
         if [SourceModuleName] == "eventlog" {
             mutate {
                 replace => [ "message", "%{Message}" ]
