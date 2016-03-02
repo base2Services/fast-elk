@@ -54,7 +54,7 @@ template "/etc/init.d/elasticsearch" do
   group 'root'
   mode '0755'
   variables({
-    :esheap => '10gb'
+    :esheap => '12g'
   })
 end
 
@@ -80,7 +80,7 @@ template "/etc/init.d/logstash" do
   group 'root'
   mode '0755'
   variables({
-    :lsheap => '2gb'
+    :lsheap => '2g'
   })
 end
 
