@@ -47,6 +47,17 @@ directory node['fast-elk']['es']['data_path'] do
    action :create
 end
 
+# set heap size for elasticsearch
+template "/etc/init.d/elasticsearch" do
+  source "elasticsearch/init.d/elasticsearch.erb"
+  owner 'root'
+  group 'root'
+  mode '0755'
+  variables({
+    :esheap => '10gb'
+  })
+end
+
 template "/etc/elasticsearch/elasticsearch.yml" do
   source "elasticsearch/elasticsearch.yml.erb"
   variables({
@@ -59,6 +70,18 @@ end
 
 package "logstash" do
   action :install
+end
+
+
+# set heap size for logstash
+template "/etc/init.d/logstash" do
+  source "logstash/init.d/logstash.erb"
+  owner 'root'
+  group 'root'
+  mode '0755'
+  variables({
+    :lsheap => '2gb'
+  })
 end
 
 #logstash templates
