@@ -53,9 +53,6 @@ template "/etc/init.d/elasticsearch" do
   owner 'root'
   group 'root'
   mode '0755'
-  variables({
-    :esheap => '2g'
-  })
 end
 
 template "/etc/elasticsearch/elasticsearch.yml" do
@@ -79,9 +76,6 @@ template "/etc/init.d/logstash" do
   owner 'root'
   group 'root'
   mode '0755'
-  variables({
-    :lsheap => '1g'
-  })
 end
 
 #logstash templates
