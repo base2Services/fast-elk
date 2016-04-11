@@ -48,7 +48,7 @@ ES_HOME=/usr/share/$NAME
 
 # Heap size defaults to 256m min, 1g max
 # Set ES_HEAP_SIZE to 50% of available RAM, but no more than 31g
-ES_HEAP_SIZE=<%= @esheap %>
+ES_HEAP_SIZE=<%= node['fast-elk']['es']['heapsize'] %>
 
 # Heap new generation
 #ES_HEAP_NEWSIZE=
