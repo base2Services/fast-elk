@@ -104,7 +104,7 @@ template "/etc/nginx/sites-available/default" do
 end
 
 ark "kibana" do
-  url "https://download.elastic.co/kibana/kibana/kibana-4.3.1-linux-x64.tar.gz"
+  url "https://download.elastic.co/kibana/kibana/kibana-4.4.0-linux-x64.tar.gz"
   prefix_root "/opt"
   prefix_home "/opt"
   version "4.3.1"
