@@ -107,7 +107,7 @@ ark "kibana" do
   url "https://download.elastic.co/kibana/kibana/kibana-4.4.0-linux-x64.tar.gz"
   prefix_root "/opt"
   prefix_home "/opt"
-  version "4.3.1"
+  version "4.4.0"
   #owner apache?
   #notifies :reload, service[nginx]"
 end
