@@ -1,0 +1,13 @@
+/var/log/elasticsearch/*.log {
+    daily
+    rotate 10
+    copytruncate
+    compress
+    delaycompress
+    missingok
+    notifempty
+    create 644 elasticsearch elasticsearch
+    postrotate
+       rm -rf /var/log/elasticsearch/*.log.$(date +%Y)*
+    endscript
+}
