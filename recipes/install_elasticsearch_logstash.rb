@@ -129,6 +129,12 @@ end
   end
 end
 
+["elasticsearch", "logstash" ].each do | lr |
+  template "/etc/logrotate.d/#{lr}.conf" do
+    source "logrotate.d/#{lr}.conf.erb"
+  end
+end
+
 
 #TODO: wait for 10 secs
 #curl -X GET 'http://localhost:9200'
