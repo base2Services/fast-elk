@@ -1,13 +1,9 @@
 /var/log/logstash/*.log /var/log/logstash/*.err /var/log/logstash/*.stdout {
-    daily
-    rotate 10
-    copytruncate
-    compress
-    delaycompress
-    missingok
-    notifempty
-    create 644 logstash logstash
-    postrotate
-       rm -rf /var/log/logstash/*.log.$(date +%Y)*
-    endscript
+        daily
+        rotate 10
+        copytruncate
+        compress
+        delaycompress
+        missingok
+        notifempty
 }
