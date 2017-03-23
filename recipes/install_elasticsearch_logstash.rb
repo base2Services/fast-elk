@@ -32,8 +32,8 @@ end
 
 execute "es_plugins" do
   command <<-EOF
-    /usr/share/elasticsearch/bin/plugin install lmenezes/elasticsearch-kopf
-    /usr/share/elasticsearch/bin/plugin install cloud-aws
+    yes | /usr/share/elasticsearch/bin/plugin install lmenezes/elasticsearch-kopf
+    yes | /usr/share/elasticsearch/bin/plugin install cloud-aws
   EOF
   action :nothing
 end
